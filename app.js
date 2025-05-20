@@ -22,12 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+const staticPath = path.join(import.meta.dirname , "public");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // The folder where your EJS files are stored
+app.use(express.static(staticPath));
 
 // Routes
 app.use('/api/auth', authRoutes);

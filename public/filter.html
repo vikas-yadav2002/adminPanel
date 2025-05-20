@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Icon Navbar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
+      <!-- Left Section -->
+      <div class="flex items-center gap-6">
+        <!-- Dashboard -->
+        <a href="#" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          Dashboard
+        </a>
+
+        <!-- Import Data Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+            Import Data
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </button>
+          <div
+            class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-48 top-[30px]"
+          >
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              Employee Import
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              Client Import
+            </a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              <i data-lucide="package-plus" class="w-4 h-4"></i>
+              Product Import
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Data -->
+        <a href="#" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+          <i data-lucide="filter" class="w-5 h-5"></i>
+          Filter Data
+        </a>
+      </div>
+
+      <!-- Right Section -->
+      <div class="flex items-center gap-4">
+        <!-- Profile Icon -->
+        <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] font-semibold cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500">
+          <i data-lucide="user" class="w-5 h-5"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Supplier Filter & Display Section - TailwindCSS Version -->
+    <div class="p-6 space-y-6 bg-gray-50 min-h-screen">
+  <!-- Breadcrumb -->
+  <div class="text-sm text-gray-500">Dashboard / <span class="text-black font-medium">Supplier List</span></div>
+
+  <!-- Filters and Actions -->
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-4">
+      <input type="text" placeholder="Supplier Name" class="border rounded px-3 py-2 w-48" />
+      <input type="text" placeholder="Search contact..." class="border rounded px-3 py-2 w-48" />
+      <select class="border rounded px-3 py-2 w-48">
+        <option>Select Status</option>
+        <option>Active</option>
+        <option>Inactive</option>
+      </select>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Search
+      </button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Add Supplier
+      </button>
+      <button class="bg-yellow-400 text-white px-4 py-2 rounded flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4z" />
+        </svg>
+        Import Supplier
+      </button>
+      <button class="bg-yellow-500 text-white px-4 py-2 rounded flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+        </svg>
+        Export Supplier
+      </button>
+    </div>
+  </div>
+
+  <!-- Supplier List Table -->
+  <div class="bg-white shadow rounded overflow-hidden">
+    <table class="min-w-full table-auto">
+      <thead class="bg-gray-100 text-left text-gray-700 text-sm">
+        <tr>
+          <th class="px-4 py-2">Name</th>
+          <th class="px-4 py-2">Email</th>
+          <th class="px-4 py-2">Company Details</th>
+          <th class="px-4 py-2">Phone</th>
+          <th class="px-4 py-2">Status</th>
+          <th class="px-4 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody class="text-sm text-gray-600">
+        <tr class="border-t">
+          <td class="px-4 py-3">Mr. Rajesh</td>
+          <td class="px-4 py-3">info@wallowimpex.com</td>
+          <td class="px-4 py-3">Wallow Impex Co., Ltd.</td>
+          <td class="px-4 py-3">+66-6626510103</td>
+          <td class="px-4 py-3">
+            <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Active</span>
+          </td>
+          <td class="px-4 py-3">
+            <button class="text-blue-600 hover:underline">View</button>
+          </td>
+        </tr>
+        <tr class="border-t">
+          <td class="px-4 py-3">Linda</td>
+          <td class="px-4 py-3">jinliya8@jinliya.cc</td>
+          <td class="px-4 py-3">Jiaxing Jinliya Textile Technology Co., Ltd.</td>
+          <td class="px-4 py-3">+86-57383745522</td>
+          <td class="px-4 py-3">
+            <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Active</span>
+          </td>
+          <td class="px-4 py-3">
+            <button class="text-blue-600 hover:underline">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+     </div>
+</body>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
