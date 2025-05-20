@@ -4,7 +4,7 @@ import { query } from '../config/db.js';
 export const seedData = async () => {
   try {
     console.log("Seeding started...");
-
+    // will try with array data in their respective file later
     // Seed Clients
     for (let i = 1; i <= 10; i++) {
       await query(
