@@ -3,8 +3,6 @@ import { query } from "../config/db.js";
 // Get all orders with optional dynamic filtering
 const GetOrderDetailsWithClientAndEmp = async (req, res) => {
   try {
-      console.log("Inside Try Block");  // This should log if the try block is entered.
-  console.log("Query Parameters:", req.query);
     // Extracting query parameters from the request
     const {
       employee_id,
