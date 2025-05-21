@@ -2,13 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import path from 'path';
+import bodyParser from 'body-parser';
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
 import filteredRoute from './routes/filteredRoute.js'
+import clientRoute from './routes/clientRoute.js'
+
 
 
 // Configuration
@@ -20,6 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 app.use(morgan('dev'));
 
 const staticPath = path.join(import.meta.dirname , "public");
@@ -29,6 +31,7 @@ app.use(express.static(staticPath));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/data' , filteredRoute )
+app.use('/api/clients' , clientRoute)
 
 
 // Root route

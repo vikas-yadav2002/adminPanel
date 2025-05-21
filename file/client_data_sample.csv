@@ -1,0 +1,6 @@
+id,client_id,name,client_type,city,state,contact_person,phone,email
+1,CL-2001,BrightTech,Technology,Denver,Colorado,Alice Brown,1112223333,alice@brighttech.com
+2,CL-2002,MediCore,Healthcare,Atlanta,Georgia,Dr. Kevin,2223334444,kevin@medicore.com
+3,CL-2003,EduSphere,Education,Boston,Massachusetts,Nancy White,3334445555,nancy@edusphere.com
+4,CL-2004,BuildSmart,Construction,Phoenix,Arizona,Robert King,4445556666,robert@buildsmart.com
+5,CL-2005,AgroLife,Agriculture,Sacramento,California,Sara Wells,5556667777,sara@agrolife.com
