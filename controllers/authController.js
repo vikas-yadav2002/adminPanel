@@ -17,7 +17,7 @@ const login = async (req, res) => {
   try {
     // Check if user exists
     const users = await query(
-      'SELECT * FROM employees WHERE username = ?',
+      'SELECT * FROM admin WHERE username = ?',
       [username]
     );
     
@@ -55,7 +55,6 @@ const login = async (req, res) => {
         id: user.id,
         username: user.username,
         name: user.name,
-        role: user.role
       }
     });
   } catch (error) {
