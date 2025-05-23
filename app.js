@@ -9,6 +9,8 @@ import bodyParser from 'body-parser';
 import authRoutes from './routes/authRoutes.js';
 import filteredRoute from './routes/filteredRoute.js'
 import clientRoute from './routes/clientRoute.js'
+import employeeRoute from './routes/employeeRoute.js'
+import productRoute from './routes/productRoute.js'
 
 
 
@@ -32,6 +34,8 @@ app.use(express.static(staticPath));
 app.use('/api/auth', authRoutes);
 app.use('/api/data' , filteredRoute )
 app.use('/api/clients' , clientRoute)
+app.use('/api/employee' , employeeRoute)
+app.use('/api/product' , productRoute)
 
 
 // Root route

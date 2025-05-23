@@ -4,9 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Icon Navbar</title>
+    <script src="./js/validatecsv.js"></script>
     <script src="./js/auth.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer>
+      document.addEventListener('DOMContentLoaded', () => {
+       setupCSVUpload('employeeCsvInput', 'uploadEmployeeBtn', 'employeeErrorBox', 'employeeDataContainer', ['employee_id', 'department', 'contact'], '/api/employees/import', 'employees');
+      })
+    </script>
   </head>
   <body class="bg-gray-100">
 
@@ -60,7 +66,8 @@
         </div>
       </div>
     </nav>
-    <div class="p-6 bg-white rounded-lg shadow-md w-full">
+   <!-- Import Products Section -->
+   <div class="p-6 bg-white rounded-lg shadow-md w-full mx-auto">
   <div class="text-sm text-gray-500 mb-4">
     Dashboard / <span class="text-black font-medium">Import Products</span>
   </div>
@@ -70,17 +77,24 @@
       <svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path d="M20 12H4m0 0l8 8m-8-8l8-8" />
       </svg>
-      Upload Product Inventory
+      Bulk Upload Products
     </h3>
-    <p class="text-sm text-yellow-800 mb-4">Add your products using a CSV file. Include name, SKU, quantity, and price for each item.</p>
-    <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md flex items-center text-sm">
+    <p class="text-sm text-yellow-800 mb-4">Upload a CSV file with product name, SKU, quantity, and price.</p>
+
+    <input type="file" id="productCsvInput" accept=".csv" class="mb-3 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-yellow-600 file:text-white hover:file:bg-yellow-700" />
+
+    <button id="uploadProductBtn" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md flex items-center text-sm">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path d="M4 4v16h16V4H4zm4 4h8v2H8V8z" />
       </svg>
       Upload Product File
     </button>
+
+    <p id="productErrorBox" class="text-sm text-red-600 mt-3"></p>
   </div>
-</div>
+
+  <div id="productDataContainer"></div>
+   </div>
 
 
 </body>

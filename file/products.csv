@@ -1,0 +1,6 @@
+id,product_id,name,category,manufacturer,description,price,stock_quantity
+1,PROD001,Laptop,Electronics,Dell,High performance laptop,999.99,50
+2,PROD002,Smartphone,Electronics,Apple,Latest model iPhone,1199.99,30
+3,PROD003,Desk Chair,Furniture,IKEA,Ergonomic office chair,199.99,75
+4,PROD004,Notebook,Stationery,Classmate,College ruled notebook,2.49,200
+5,PROD005,Pen,Stationery,Parker,Smooth writing pen,1.99,150

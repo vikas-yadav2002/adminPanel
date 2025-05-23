@@ -1,0 +1,6 @@
+id,employee_id,name,username,password,designation,state,city,role
+1,EMP001,Alice Johnson,alice.johnson,password123,Manager,California,Los Angeles,admin
+2,EMP002,Bob Smith,bob.smith,pass456,Engineer,Texas,Houston,user
+3,EMP003,Charlie Lee,charlie.lee,charliepass,Designer,New York,New York City,user
+4,EMP004,Diana King,diana.king,diana123,HR,Florida,Miami,user
+5,EMP005,Ethan Wright,ethan.wright,ethanpwd,Sales,Illinois,Chicago,user
