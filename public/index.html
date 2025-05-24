@@ -6,8 +6,8 @@
   <title>Dark Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module">
-    // import { createIcons, icons } from 'https://unpkg.com/lucide@latest/dist/esm/lucide.js';
-    // window.onload = () => createIcons({ icons });
+    import { createIcons, icons } from 'https://unpkg.com/lucide@latest/dist/esm/lucide.js';
+    window.onload = () => createIcons({ icons });
   </script>
   <!-- <script src="./js/auth.js"></script> -->
 </head>
@@ -61,7 +61,7 @@
       const isHidden = passwordInput.type === 'password';
       passwordInput.type = isHidden ? 'text' : 'password';
       eyeIcon.setAttribute('data-lucide', isHidden ? 'eye-off' : 'eye');
-      // lucide.createIcons(); // Refresh icon
+      lucide.createIcons(); // Refresh icon
     });
   </script>
   <script src="./js/login.js"></script>

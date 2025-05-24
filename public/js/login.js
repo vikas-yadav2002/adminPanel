@@ -16,7 +16,8 @@
     // Disable button and show spinner
     e.preventDefault();
     loginBtn.disabled = true;
-    spinner.classList.remove('hidden');
+     btnText.textContent = 'Loading..';
+    // spinner.classList.remove('hidden');
 
     try {
       // Example form data (replace with your real input values)
@@ -45,6 +46,6 @@
       // Re-enable button and hide spinner
       loginBtn.disabled = false;
       btnText.textContent = 'Login';
-      spinner.classList.add('hidden');
+      // spinner.classList.add('hidden');
     }
   });
