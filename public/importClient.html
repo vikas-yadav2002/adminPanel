@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script defer>
+  <!-- <script defer>
     document.addEventListener('DOMContentLoaded', () => {
       const fileInput = document.getElementById('csvInput');
       const uploadBtn = document.getElementById('uploadBtn');
@@ -131,7 +131,53 @@
 }
 
     });
-  </script>
+  </script> -->
+  <script src="./js/validatecsv.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    handleCSVImport({
+      fileInputId: 'csvInput',
+      uploadBtnId: 'uploadBtn',
+      errorBoxId: 'errorBox',
+      container :'dataContainer',
+      endpoint: '/api/clients/import',
+      arrayname : 'clients',
+      requiredFields: ['name', 'email', 'phone'],
+      renderFn: function renderClients(data, container) {
+        container.innerHTML = `
+          <h4 class="text-md font-semibold mt-6 mb-2">Latest Uploaded Clients</h4>
+          <table class="min-w-full text-sm border border-gray-300">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="border px-2 py-1">Name</th>
+                <th class="border px-2 py-1">Email</th>
+                <th class="border px-2 py-1">Phone</th>
+                <th class="border px-2 py-1">Client Type</th>
+                <th class="border px-2 py-1">City</th>
+                <th class="border px-2 py-1">State</th>
+                <th class="border px-2 py-1">Contact Person</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(row => `
+                <tr>
+                  <td class="border px-2 py-1">${row.name}</td>
+                  <td class="border px-2 py-1">${row.email}</td>
+                  <td class="border px-2 py-1">${row.phone}</td>
+                  <td class="border px-2 py-1">${row.client_type || '-'}</td>
+                  <td class="border px-2 py-1">${row.city || '-'}</td>
+                  <td class="border px-2 py-1">${row.state || '-'}</td>
+                  <td class="border px-2 py-1">${row.contact_person || '-'}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    });
+  });
+</script>
+
+
 </head>
 
 <body class="bg-gray-100">

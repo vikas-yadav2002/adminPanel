@@ -40,7 +40,7 @@ function isValidProduct(product) {
   if (typeof product.manufacturer !== 'string' || product.manufacturer.trim() === '') return false;
   if (typeof product.description !== 'string') return false; // description can be empty string
   if (isNaN(Number(product.price))) return false;
-  if (!Number.isInteger(product.stock_quantity)) return false;
+  if (isNaN(Number(product.stock_quantity))) return false;
   return true;
 }
 // Utility: Validate employee
@@ -176,7 +176,7 @@ const ProductImport = async (req, res) => {
     }
   });
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   if (invalidRows.length > 0) {
     return res.status(422).json({ message: 'Some rows are invalid.', invalidRows });

@@ -8,11 +8,55 @@
     <script src="./js/auth.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer>
-      document.addEventListener('DOMContentLoaded', () => {
-       setupCSVUpload('employeeCsvInput', 'uploadEmployeeBtn', 'employeeErrorBox', 'employeeDataContainer', ['employee_id', 'department', 'contact'], '/api/employees/import', 'employees');
-      })
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+  handleCSVImport({
+      fileInputId: 'productCsvInput',
+      uploadBtnId: 'uploadProductBtn',
+      errorBoxId: 'productErrorBox',
+      container :'productDataContainer',
+      endpoint: '/api/product/import',
+      arrayname : 'products',
+  requiredFields: ['name', 'category', 'price'],
+  renderFn:function renderProducts(data, container) {
+  container.innerHTML = `
+    <h4 class="text-md font-semibold mt-6 mb-2">Latest Uploaded Products</h4>
+    <table class="min-w-full text-sm border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-2 py-1">Product ID</th>
+          <th class="border px-2 py-1">Name</th>
+          <th class="border px-2 py-1">Category</th>
+          <th class="border px-2 py-1">Manufacturer</th>
+          <th class="border px-2 py-1">Description</th>
+          <th class="border px-2 py-1">Price ($)</th>
+          <th class="border px-2 py-1">Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td class="border px-2 py-1">${row.product_id}</td>
+            <td class="border px-2 py-1">${row.name}</td>
+            <td class="border px-2 py-1">${row.category}</td>
+            <td class="border px-2 py-1">${row.manufacturer}</td>
+            <td class="border px-2 py-1">${row.description}</td>
+            <td class="border px-2 py-1">${row.price}</td>
+            <td class="border px-2 py-1">${row.stock_quantity}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+
+});
+
+
+
+  });
+</script>
   </head>
   <body class="bg-gray-100">
 

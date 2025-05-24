@@ -4,15 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Icon Navbar</title>
-    <script src="./js/validatecsv.js"></script>
+    
     <script src="./js/auth.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer>
-      document.addEventListener('DOMContentLoaded', () => {
-       setupCSVUpload('employeeCsvInput', 'uploadEmployeeBtn', 'employeeErrorBox', 'employeeDataContainer', ['employee_id', 'department', 'contact'], '/api/employees/import', 'employees');
-      })
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="./js/validatecsv.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  handleCSVImport({
+  fileInputId: 'employeeCsvInput',
+  uploadBtnId: 'uploadEmployeeBtn',
+  errorBoxId: 'employeeErrorBox',
+  container : 'employeeDataContainer',
+  endpoint: '/api/employees/import',
+  requiredFields: ['name', 'username', 'designation'],
+  arrayname : 'employees',
+  renderFn:function renderEmployees(data, container) {
+  container.innerHTML = `
+    <h4 class="text-md font-semibold mt-6 mb-2">Latest Uploaded Employees</h4>
+    <table class="min-w-full text-sm border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border px-2 py-1">Employee ID</th>
+          <th class="border px-2 py-1">Name</th>
+          <th class="border px-2 py-1">Username</th>
+          <th class="border px-2 py-1">Designation</th>
+          <th class="border px-2 py-1">State</th>
+          <th class="border px-2 py-1">City</th>
+          <th class="border px-2 py-1">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map(row => `
+          <tr>
+            <td class="border px-2 py-1">${row.employee_id}</td>
+            <td class="border px-2 py-1">${row.name}</td>
+            <td class="border px-2 py-1">${row.username}</td>
+            <td class="border px-2 py-1">${row.designation || '-'}</td>
+            <td class="border px-2 py-1">${row.state || '-'}</td>
+            <td class="border px-2 py-1">${row.city || '-'}</td>
+            <td class="border px-2 py-1">${row.role}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+});
+
+
+
+  });
+</script>
+
+
   </head>
   <body class="bg-gray-100">
 
