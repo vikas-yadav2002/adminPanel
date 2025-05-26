@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 import bodyParser from 'body-parser';
+import { fileURLToPath } from 'url';
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
@@ -36,6 +37,67 @@ app.use('/api/data' , filteredRoute )
 app.use('/api/clients' , clientRoute)
 app.use('/api/employees' , employeeRoute)
 app.use('/api/product' , productRoute)
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+//dashboard
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+//login
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+//filter
+app.get('/filter', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'filter.html'));
+});
+
+//importEmployee
+app.get('/importEmployee', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'importEmployee.html'));
+});
+
+
+//importClient
+app.get('/importClient', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'importClient.html'));
+});
+
+
+//importProduct
+app.get('/importProduct', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'importProduct.html'));
+});
+
+
+//importOrders
+app.get('/importOrders', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'importOrders.html'));
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Root route
