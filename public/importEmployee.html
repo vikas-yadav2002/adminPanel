@@ -63,11 +63,11 @@
   <body class="bg-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
+   <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
       <!-- Left Section -->
       <div class="flex items-center gap-6">
         <!-- Dashboard -->
-        <a href="#" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+        <a href="/dashboard" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
           <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
           Dashboard
         </a>
@@ -82,23 +82,27 @@
           <div
             class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-48 top-[30px]"
           >
-            <a href="./importEmployee.html" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <a href="/importEmployee" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
               <i data-lucide="user-plus" class="w-4 h-4"></i>
               Employee Import
             </a>
-            <a href="./importClient.html" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <a href="/importClient" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
               <i data-lucide="users" class="w-4 h-4"></i>
               Client Import
             </a>
-            <a href="./importProduct.html" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <a href="/importProduct" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
               <i data-lucide="package-plus" class="w-4 h-4"></i>
               Product Import
+            </a>
+            <a href="/importOrders" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+              <i data-lucide="package-plus" class="w-4 h-4"></i>
+              Orders Import
             </a>
           </div>
         </div>
 
         <!-- Filter Data -->
-        <a href="./filter.html" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+        <a href="/filter" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
           <i data-lucide="filter" class="w-5 h-5"></i>
           Filter Data
         </a>
@@ -126,7 +130,10 @@
       Bulk Import Employees
     </h3>
     <p class="text-sm text-green-800 mb-4">Upload your employee CSV file. Format must include employee ID, department, and contact info.</p>
-
+    <a href="./file/employees.csv" download
+      class="inline-block mb-3 text-sm text-green-700 underline hover:text-green-900">
+      Download Sample CSV
+    </a>
     <input type="file" id="employeeCsvInput" accept=".csv" class="mb-3 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700" />
 
     <button id="uploadEmployeeBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center text-sm">

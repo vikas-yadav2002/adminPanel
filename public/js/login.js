@@ -37,7 +37,7 @@
       const data = await response.json();
       localStorage.setItem("token" , JSON.stringify(data));
       console.log('✅ Response:', data);
-      window.location.href = '/dashboard.html'
+      window.location.href = '/dashboard'
 
       // Handle redirect or error message here
     } catch (err) {

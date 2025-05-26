@@ -60,6 +60,25 @@ function isValidEmployee(employee) {
 }
 
 
+function isValidOrder(order) {
+  const statusValues = ['pending', 'completed', 'shipped'];
+  const isoDateRegex = /^\d{4}-\d{2}-\d{2}/;
+
+  if (isNaN(Number(order.id))) return false;
+  if (!order.order_id || typeof order.order_id !== 'string') return false;
+  if (!order.client_id || typeof order.client_id !== 'string') return false;
+  if (!order.employee_id || typeof order.employee_id !== 'string') return false;
+  if (!isoDateRegex.test(order.order_date)) return false;
+  if (isNaN(Number(order.total_amount))) return false;
+  if (!statusValues.includes(order.status)) return false;
+  if (typeof order.notes !== 'string') return false;
+  if (!isoDateRegex.test(order.created_at)) return false;
+  if (!isoDateRegex.test(order.updated_at)) return false;
+
+  return true;
+}
+
+
 /**
  * @param {import('express').Request} req
  * @param {import('express').Response} res
@@ -197,4 +216,53 @@ const ProductImport = async (req, res) => {
 };
 
 
-export { ClientImport , ProductImport , EmployeeImport };
+const OrderImport = async (req, res) => {
+  const { orders } = req.body;
+
+  if (!Array.isArray(orders)) {
+    return res.status(400).json({ error: 'Invalid format. Expected "orders" array.' });
+  }
+
+  const invalidRows = [];
+
+  orders.forEach((order, index) => {
+    if (!isValidOrder(order)) {
+      console.log(`Invalid order at row ${index + 1}:`, order);
+      invalidRows.push({ row: index + 1, order });
+    }
+  });
+
+  // Optional delay for demo
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+  await delay(5000);
+
+  // Return errors if validation failed
+  if (invalidRows.length > 0) {
+    return res.status(422).json({
+      message: 'Some rows are invalid.',
+      invalidRows,
+    });
+  }
+
+  // Build SQL query
+  const sql = `
+    INSERT INTO orders 
+      (id, order_id, client_id, employee_id, order_date, total_amount, status, notes, created_at, updated_at)
+    VALUES 
+      ${orders.map(order =>
+        `('${order.id}', '${order.order_id}', '${order.client_id}', '${order.employee_id}', '${order.order_date}', ${order.total_amount}, '${order.status}', '${order.notes}', '${order.created_at}', '${order.updated_at}')`
+      ).join(',\n      ')};
+  `;
+
+  console.log("Generated SQL:", sql); // Debug only
+
+  return res.status(200).json({
+    message: 'All orders are valid.',
+    sql,
+    data: orders,
+  });
+};
+
+
+
+export { ClientImport , ProductImport , EmployeeImport , OrderImport };

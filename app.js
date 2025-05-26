@@ -12,6 +12,7 @@ import filteredRoute from './routes/filteredRoute.js'
 import clientRoute from './routes/clientRoute.js'
 import employeeRoute from './routes/employeeRoute.js'
 import productRoute from './routes/productRoute.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 
 
@@ -37,6 +38,7 @@ app.use('/api/data' , filteredRoute )
 app.use('/api/clients' , clientRoute)
 app.use('/api/employees' , employeeRoute)
 app.use('/api/product' , productRoute)
+app.use('/api/orders' , orderRoutes);
 
 
 const __filename = fileURLToPath(import.meta.url);
