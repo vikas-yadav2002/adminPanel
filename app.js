@@ -13,6 +13,7 @@ import clientRoute from './routes/clientRoute.js'
 import employeeRoute from './routes/employeeRoute.js'
 import productRoute from './routes/productRoute.js'
 import orderRoutes from './routes/orderRoutes.js'
+import TableRoutes from './routes/TableRoutes.js'
 
 
 
@@ -36,6 +37,7 @@ app.use(express.static(staticPath));
 app.use('/api/auth', authRoutes);
 app.use('/api/data' , filteredRoute )
 app.use('/api/clients' , clientRoute)
+app.use('/api/table' , TableRoutes )
 app.use('/api/employees' , employeeRoute)
 app.use('/api/product' , productRoute)
 app.use('/api/orders' , orderRoutes);
@@ -88,8 +90,28 @@ app.get('/importOrders', (req, res) => {
 });
 
 
+//Data table routes
 
 
+// client data 
+app.get('/Client-Data', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'client-Table.html'));
+});
+
+//emp data
+app.get('/Emp-Data', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'emp-Table.html'));
+});
+
+//order data 
+app.get('/Order-Data', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'order-Table.html'));
+});
+
+//product data
+app.get('/Product-Data', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'product-table.html'));
+});
 
 
 

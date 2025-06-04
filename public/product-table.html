@@ -45,19 +45,19 @@
         </button>
         <div
           class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-48 top-[30px]">
-          <a href="importEmployee" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="emp-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             Employee Table
           </a>
-          <a href="importClient" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="users" class="w-4 h-4"></i>
             client Table
           </a>
-          <a href="/importProduct" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="package-plus" class="w-4 h-4"></i>
             products Table
           </a>
-          <a href="/importOrders" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
               <i data-lucide="package-plus" class="w-4 h-4"></i>
               orders Table
             </a>
@@ -88,7 +88,7 @@
     id="importBtn" 
     class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
   >
-    Import Client Data
+    Import Product Data
   </button>
     <table id="myTable" class="display">
   <thead>
@@ -179,7 +179,7 @@
 <script>
   lucide.createIcons();
   document.getElementById('importBtn').addEventListener('click', function() {
-    window.location.href = '/importClient';
+    window.location.href = '/importProduct';
   });
  $(document).ready(function () {
     $('#myTable').DataTable(); // You can pass options here
