@@ -20,33 +20,32 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   
   <script src="./js/validatecsv.js"></script>
+  <script src="./js/renderTable.js"></script>
+  <script src="./js/fetchAndRender.js"></script>
+  <script src="./js/filterAndRender.js"></script>
  <script>
-  async function fetchClients() {
-    try {
-      const response = await fetch('http://localhost:3000/api/table/Data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ TableName: 'clients' }) // 👈 specify your table name here
-      });
+document.addEventListener("DOMContentLoaded", () => {
+  const columns = [
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "client_type", label: "Client Type" },
+    { key: "city", label: "City" },
+    { key: "state", label: "State" },
+    { key: "contact_person", label: "Contact Person" }
+  ];
 
-      const result = await response.json();
+  fetchAndRenderTable({
+    tableName: "clients",
+    containerId: "myTable",
+    columns
+  });
 
-      if (result.success) {
-        console.log("Fetched Clients:", result.data);
-        // You can now use result.data to populate your table or display in UI
-      } else {
-        console.error("Error:", result.message);
-      }
+  setupFilter(columns);
+  
+});
 
-    } catch (err) {
-      console.error("Network error:", err);
-    }
-  }
 
-  // Call the function when needed (on page load, button click, etc.)
-  fetchClients();
 </script>
 
 
@@ -120,27 +119,20 @@
   </button>
     <table id="myTable" class="display">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Client Type</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Contact Person</th>
-    </tr>
-  </thead>
+  <tr>
+    <th data-col="name">Name</th>
+    <th data-col="email">Email</th>
+    <th data-col="phone">Phone</th>
+    <th data-col="client_type">Client Type</th>
+    <th data-col="city">City</th>
+    <th data-col="state">State</th>
+    <th data-col="contact_person">Contact Person</th>
+  </tr>
+</thead>
+
   <tbody>
     <!-- Add rows dynamically or manually -->
-    <tr>
-      <td>John Doe</td>
-      <td>john@example.com</td>
-      <td>1234567890</td>
-      <td>Premium</td>
-      <td>Mumbai</td>
-      <td>Maharashtra</td>
-      <td>Jane Smith</td>
-    </tr>
+  
     <!-- More rows... -->
   </tbody>
 </table>
@@ -199,21 +191,16 @@
   </div>
 </div>
 
-
-
-
-
 </body>
 <script>
   lucide.createIcons();
   document.getElementById('importBtn').addEventListener('click', function() {
     window.location.href = '/importClient';
   });
- $(document).ready(function () {
-    $('#myTable').DataTable(); // You can pass options here
-  });
+
+
   //filter 
-   const filterOpenBtn = document.getElementById('openFilterBtn');
+  const filterOpenBtn = document.getElementById('openFilterBtn');
   const filterModal = document.getElementById('filterColumnModal');
   const filterOverlay = document.getElementById('filterOverlay');
   const filterCloseBtn = document.getElementById('closeFilterBtn');
