@@ -57,7 +57,10 @@ app.get('/dashboard', (req, res) => {
 });
 
 //login
-app.get('/login', (req, res) => {
+// app.get('/login', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -100,7 +103,7 @@ app.get('/Client-Data', (req, res) => {
 
 //emp data
 app.get('/Emp-Data', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'emp-Table.html'));
+  res.sendFile(path.join(__dirname, 'public', 'emp-table.html'));
 });
 
 //order data 
@@ -125,7 +128,7 @@ app.get('/Product-Data', (req, res) => {
 
 
 // Root route
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({
     message: 'Welcome to Company API',
     version: '1.0.0',

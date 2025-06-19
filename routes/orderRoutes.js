@@ -3,6 +3,6 @@ import {OrderImport} from "../controllers/importData.js";
 
 const router = Router();
 
-router.get('/Data' , OrderImport);
+router.post('/import' , OrderImport);
 
 export default router;

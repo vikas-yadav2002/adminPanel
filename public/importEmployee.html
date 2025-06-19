@@ -1,78 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Icon Navbar</title>
-    
-    <script src="./js/auth.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <script src="./js/validatecsv.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-  handleCSVImport({
-  fileInputId: 'employeeCsvInput',
-  uploadBtnId: 'uploadEmployeeBtn',
-  errorBoxId: 'employeeErrorBox',
-  container : 'employeeDataContainer',
-  endpoint: '/api/employees/import',
-  requiredFields: ['name', 'username', 'designation'],
-  arrayname : 'employees',
-  renderFn:function renderEmployees(data, container) {
-  container.innerHTML = `
-    <h4 class="text-md font-semibold mt-6 mb-2">Latest Uploaded Employees</h4>
-    <table class="min-w-full text-sm border border-gray-300">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="border px-2 py-1">Employee ID</th>
-          <th class="border px-2 py-1">Name</th>
-          <th class="border px-2 py-1">Username</th>
-          <th class="border px-2 py-1">Designation</th>
-          <th class="border px-2 py-1">State</th>
-          <th class="border px-2 py-1">City</th>
-          <th class="border px-2 py-1">Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.map(row => `
-          <tr>
-            <td class="border px-2 py-1">${row.employee_id}</td>
-            <td class="border px-2 py-1">${row.name}</td>
-            <td class="border px-2 py-1">${row.username}</td>
-            <td class="border px-2 py-1">${row.designation || '-'}</td>
-            <td class="border px-2 py-1">${row.state || '-'}</td>
-            <td class="border px-2 py-1">${row.city || '-'}</td>
-            <td class="border px-2 py-1">${row.role}</td>
-          </tr>`).join('')}
-      </tbody>
-    </table>
-  `;
-}
 
-});
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import Employees</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-  });
-</script>
+  <script src="./js/auth.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
+  <script src="./js/validatecsv.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize CSV import functionality for employees
+      handleCSVImport({
+        fileInputId: 'employeeCsvInput',
+        uploadBtnId: 'uploadEmployeeBtn',
+        errorBoxId: 'employeeErrorBox',
+        container: 'employeeDataContainer',
+        endpoint: '/api/employees/import', // Assuming your employee import API endpoint
+        requiredFields: ['name', 'username', 'designation'],
+        arrayname: 'employees',
+        renderFn: function renderEmployees(data, container) {
+          if (!container) {
+            alert("No container found for employee data.");
+            return;
+          }
+          container.innerHTML = `
+            <h4 class="text-md font-semibold mt-6 mb-2">Latest Uploaded Employees</h4>
+            <table id="employeeTable" class="min-w-full text-sm border border-gray-300">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border px-2 py-1">Employee ID</th>
+                  <th class="border px-2 py-1">Name</th>
+                  <th class="border px-2 py-1">Username</th>
+                  <th class="border px-2 py-1">Designation</th>
+                  <th class="border px-2 py-1">State</th>
+                  <th class="border px-2 py-1">City</th>
+                  <th class="border px-2 py-1">Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.map(row => `
+                  <tr>
+                    <td class="border px-2 py-1">${row.employee_id || '-'}</td>
+                    <td class="border px-2 py-1">${row.name || '-'}</td>
+                    <td class="border px-2 py-1">${row.username || '-'}</td>
+                    <td class="border px-2 py-1">${row.designation || '-'}</td>
+                    <td class="border px-2 py-1">${row.state || '-'}</td>
+                    <td class="border px-2 py-1">${row.city || '-'}</td>
+                    <td class="border px-2 py-1">${row.role || '-'}</td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          `;
 
-  </head>
-  <body class="bg-gray-100">
+          // Initialize DataTable for the newly rendered table
+          $('#employeeTable').DataTable();
+        }
+      });
 
-    <!-- Navbar -->
-   <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
-    <!-- Left Section -->
+      // Handle single employee form submission
+      document.getElementById('employeeForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const employeeData = {};
+        formData.forEach((value, key) => {
+          // Adjust key names to match backend expectations (e.g., camelCase to snake_case)
+          const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+          employeeData[snakeCaseKey] = value;
+        });
+
+        // Add a placeholder for employee_id if not generated by backend
+        // This is a client-side placeholder; your backend should ideally generate unique IDs
+        if (!employeeData.employee_id) {
+          employeeData.employee_id = 'EMP-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        }
+
+        try {
+          const response = await fetch('/api/employees', { // Assuming your single employee add API endpoint
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}` // Include auth token
+            },
+            body: JSON.stringify(employeeData)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert('Employee added successfully!');
+            form.reset(); // Clear form fields
+            // Optionally, you might want to re-fetch and re-render the employee table
+            // For example, call a function that fetches all employees and then renders them:
+            // fetchAndRenderEmployees();
+          } else {
+            alert(`Error adding employee: ${result.message || response.statusText}`);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while adding the employee.');
+        }
+      });
+    });
+  </script>
+  <style>
+    #employeeDataContainer {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+</head>
+
+<body class="bg-gray-100">
+
+  <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
     <div class="flex items-center gap-6">
-      <!-- Dashboard -->
       <a href="/dashboard" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
         <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
         Dashboard
       </a>
 
-      <!-- Data Table Dropdown -->
       <div class="relative group">
         <button class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
           <i data-lucide="upload-cloud" class="w-5 h-5"></i>
@@ -87,56 +144,142 @@
           </a>
           <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="users" class="w-4 h-4"></i>
-            client Table
+            Client Table
           </a>
           <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="package-plus" class="w-4 h-4"></i>
-            products Table
+            Products Table
           </a>
           <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-              <i data-lucide="package-plus" class="w-4 h-4"></i>
-              orders Table
-            </a>
+            <i data-lucide="package-plus" class="w-4 h-4"></i>
+            Orders Table
+          </a>
         </div>
       </div>
 
-      <!-- Filter Data -->
       <a href="./filter.html" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
         <i data-lucide="filter" class="w-5 h-5"></i>
         Filter Data
       </a>
     </div>
 
-    <!-- Right Section -->
     <div class="flex items-center gap-4">
-      <!-- Profile Icon -->
       <div
         class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] font-semibold cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500">
         <i data-lucide="user" class="w-5 h-5"></i>
       </div>
     </div>
   </nav>
-    <!-- Import Employees Section -->
-  <div class="p-6 bg-white rounded-lg shadow-md w-full mx-auto">
-  <div class="text-sm text-gray-500 mb-4">
+
+  <div class="text-sm text-gray-500 mt-4 ml-4">
     Dashboard / <span class="text-black font-medium">Import Employees</span>
   </div>
 
-  <div class="border border-green-200 rounded-lg p-6 bg-green-50 shadow-sm hover:shadow-md transition">
-    <h3 class="text-xl font-semibold text-green-700 mb-3 flex items-center">
-      <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M12 4v16m8-8H4" />
-      </svg>
-      Bulk Import Employees
-    </h3>
-    <p class="text-sm text-green-800 mb-4">Upload your employee CSV file. Format must include employee ID, department, and contact info.</p>
+  <div class="flex gap-6 p-6">
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg flex-shrink-0">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-800">Add Employee Data</h2>
+
+      <form id="employeeForm" class="space-y-5">
+
+        <div>
+          <label for="name" id="Emp-name" class="block mb-1 font-medium text-gray-700">Name</label>
+          <input type="text" id="name" name="name" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="username" class="block mb-1 font-medium text-gray-700">Username</label>
+          <input type="text" id="username" name="username" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="email" class="block mb-1 font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="phone" class="block mb-1 font-medium text-gray-700">Phone</label>
+          <input type="tel" id="phone" name="phone" pattern="[0-9]{10}"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="10 digit phone number" />
+        </div>
+
+        <div>
+          <label for="designation" class="block mb-1 font-medium text-gray-700">Designation</label>
+          <input type="text" id="designation" name="designation" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="department" class="block mb-1 font-medium text-gray-700">Department</label>
+          <input type="text" id="department" name="department"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="role" class="block mb-1 font-medium text-gray-700">Role</label>
+          <select id="role" name="role" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="" disabled selected>Select role</option>
+            <option value="Admin">Admin</option>
+            <option value="Manager">Manager</option>
+            <option value="Employee">Employee</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="state" class="block mb-1 font-medium text-gray-700">State</label>
+          <input type="text" id="state" name="state"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label for="city" class="block mb-1 font-medium text-gray-700">City</label>
+          <input type="text" id="city" name="city"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <button type="submit" id="AddEmployeeButton"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition">
+          Add Employee
+        </button>
+
+      </form>
+    </div>
+
+    <div id="employeeDataContainer" class="flex-1 overflow-x-auto max-w-[calc(100vw-500px)] bg-white p-4 rounded-lg shadow-md">
+      </div>
+
+  </div>
+
+  <button id="openModalBtn"
+    class="fixed bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg z-50">
+    <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+  </button>
+
+  <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300">
+  </div>
+
+  <div id="csvModal"
+    class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 p-6 overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-blue-700">Bulk Import Employees</h3>
+      <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+    </div>
+    <p class="text-sm text-blue-800 mb-4">Upload your employee CSV file. Ensure the format includes name, username, and designation.</p>
     <a href="./file/employees.csv" download
       class="inline-block mb-3 text-sm text-green-700 underline hover:text-green-900">
       Download Sample CSV
     </a>
-    <input type="file" id="employeeCsvInput" accept=".csv" class="mb-3 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700" />
+    <input type="file" id="employeeCsvInput" accept=".csv"
+      class="mb-3 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+      file:rounded file:border-0 file:text-sm file:font-semibold
+      file:bg-blue-600 file:text-white hover:file:bg-blue-700" />
 
-    <button id="uploadEmployeeBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center text-sm">
+    <button id="uploadEmployeeBtn"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center text-sm">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path d="M4 4v16h16V4H4zm4 4h8v2H8V8z" />
       </svg>
@@ -146,12 +289,40 @@
     <p id="employeeErrorBox" class="text-sm text-red-600 mt-3"></p>
   </div>
 
-  <div id="employeeDataContainer"></div>
-     </div>
-
 </body>
-    <script>
-      lucide.createIcons();
-    </script>
-  </body>
+<script src="./js/GenericPost.js"></script>
+<script>
+  lucide.createIcons();
+
+  
+ document.getElementById('employeeForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const data = getFormData('employeeForm');  //  Generic usage
+  console.log('Submitting:', data);
+
+  const result = await postFormData('/api/employees', data); // Change API endpoint as needed
+});
+
+
+  // Import modal functionality
+  const openBtn = document.getElementById('openModalBtn');
+  const modal = document.getElementById('csvModal');
+  const overlay = document.getElementById('modalOverlay');
+  const closeBtn = document.getElementById('closeModalBtn');
+
+  openBtn.addEventListener('click', () => {
+    modal.classList.remove('translate-x-full');
+    overlay.classList.remove('hidden');
+  });
+
+  const closeModal = () => {
+    modal.classList.add('translate-x-full');
+    overlay.classList.add('hidden');
+  }
+
+  overlay.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+</script>
+
 </html>

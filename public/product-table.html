@@ -4,39 +4,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Icon Navbar</title>
-  <!-- jQuery (required by DataTables) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <title>Product Table</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
   <script src="./js/auth.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  
+
   <script src="./js/validatecsv.js"></script>
+  <script src="./js/renderTable.js"></script>
+  <script src="./js/fetchAndRender.js"></script>
+  <script src="./js/filterAndRender.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const columns = [
+        { key: "product_id", label: "Product ID" },
+        { key: "name", label: "Name" },
+        { key: "category", label: "Category" },
+        { key: "manufacturer", label: "Manufacturer" },
+        { key: "price", label: "Price" },
+        { key: "stock_quantity", label: "Stock Quantity" },
+        { key: "description", label: "Description" } // Added description as a column
+      ];
+
+      fetchAndRenderTable({
+        tableName: "products", // Changed to 'products'
+        containerId: "myTable",
+        columns
+      });
+
+      setupFilter(columns);
+
+    });
+  </script>
 
 
 </head>
 
 <body class="bg-gray-100">
 
-  <!-- Navbar -->
   <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
-    <!-- Left Section -->
     <div class="flex items-center gap-6">
-      <!-- Dashboard -->
       <a href="/dashboard" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
         <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
         Dashboard
       </a>
 
-      <!-- Data Table Dropdown -->
       <div class="relative group">
         <button class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
           <i data-lucide="upload-cloud" class="w-5 h-5"></i>
@@ -51,29 +69,26 @@
           </a>
           <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="users" class="w-4 h-4"></i>
-            client Table
+            Client Table
           </a>
           <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
             <i data-lucide="package-plus" class="w-4 h-4"></i>
-            products Table
+            Products Table
           </a>
           <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-              <i data-lucide="package-plus" class="w-4 h-4"></i>
-              orders Table
-            </a>
+            <i data-lucide="package-plus" class="w-4 h-4"></i>
+            Orders Table
+          </a>
         </div>
       </div>
 
-      <!-- Filter Data -->
       <a href="./filter.html" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
         <i data-lucide="filter" class="w-5 h-5"></i>
         Filter Data
       </a>
     </div>
 
-    <!-- Right Section -->
     <div class="flex items-center gap-4">
-      <!-- Profile Icon -->
       <div
         class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] font-semibold cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500">
         <i data-lucide="user" class="w-5 h-5"></i>
@@ -83,109 +98,87 @@
 
 
 
-<div id="dataContainer" class="m-[15px]">
-    <button 
-    id="importBtn" 
-    class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-  >
-    Import Product Data
-  </button>
+  <div id="dataContainer" class="m-[15px]">
+    <button id="importBtn" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+      Import Product Data
+    </button>
     <table id="myTable" class="display">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Client Type</th>
-      <th>City</th>
-      <th>State</th>
-      <th>Contact Person</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Add rows dynamically or manually -->
-    <tr>
-      <td>John Doe</td>
-      <td>john@example.com</td>
-      <td>1234567890</td>
-      <td>Premium</td>
-      <td>Mumbai</td>
-      <td>Maharashtra</td>
-      <td>Jane Smith</td>
-    </tr>
-    <!-- More rows... -->
-  </tbody>
-</table>
+      <thead>
+        <tr>
+          <th data-col="product_id">Product ID</th>
+          <th data-col="name">Name</th>
+          <th data-col="category">Category</th>
+          <th data-col="manufacturer">Manufacturer</th>
+          <th data-col="price">Price</th>
+          <th data-col="stock_quantity">Stock Quantity</th>
+          <th data-col="description">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
 
 
-</div>
-
-<!-- Filter Floating Button -->
-<button id="openFilterBtn"
-  class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-full shadow-lg z-50 flex items-center gap-2">
-  <i data-lucide="filter" class="w-5 h-5"></i> Filter
-</button>
-
-<!-- Overlay -->
-<div id="filterOverlay"
-  class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300">
-</div>
-
-<!-- Slide-in Modal -->
-<div id="filterColumnModal"
-  class="fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto rounded-l-xl">
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-semibold text-gray-700">Choose Columns to Show</h2>
-      <button id="closeFilterBtn" class="text-gray-500 hover:text-gray-700">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-    </div>
-
-    <!-- Checkbox Form -->
-    <form id="columnFilterForm" class="space-y-4 text-sm text-gray-700">
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="clientId" checked> Client ID
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="clientName" checked> Client Name
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="email" checked> Email
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="phone"> Phone
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="startDate"> Start Date
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="checkbox" name="columns" value="clientType"> Client Type
-      </label>
-
-      <button type="submit"
-        class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md">
-        Apply
-      </button>
-    </form>
   </div>
-</div>
 
+  <button id="openFilterBtn"
+    class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-full shadow-lg z-50 flex items-center gap-2">
+    <i data-lucide="filter" class="w-5 h-5"></i> Filter
+  </button>
 
+  <div id="filterOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 transition-opacity duration-300">
+  </div>
 
+  <div id="filterColumnModal"
+    class="fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto rounded-l-xl">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold text-gray-700">Choose Columns to Show</h2>
+        <button id="closeFilterBtn" class="text-gray-500 hover:text-gray-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
 
+      <form id="columnFilterForm" class="space-y-4 text-sm text-gray-700">
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="product_id" checked> Product ID
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="name" checked> Name
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="category" checked> Category
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="manufacturer"> Manufacturer
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="price"> Price
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="stock_quantity"> Stock Quantity
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="checkbox" name="columns" value="description"> Description
+        </label>
+
+        <button type="submit"
+          class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md">
+          Apply
+        </button>
+      </form>
+    </div>
+  </div>
 
 </body>
 <script>
   lucide.createIcons();
-  document.getElementById('importBtn').addEventListener('click', function() {
+  document.getElementById('importBtn').addEventListener('click', function () {
     window.location.href = '/importProduct';
   });
- $(document).ready(function () {
-    $('#myTable').DataTable(); // You can pass options here
-  });
+
   //filter 
-   const filterOpenBtn = document.getElementById('openFilterBtn');
+  const filterOpenBtn = document.getElementById('openFilterBtn');
   const filterModal = document.getElementById('filterColumnModal');
   const filterOverlay = document.getElementById('filterOverlay');
   const filterCloseBtn = document.getElementById('closeFilterBtn');
@@ -206,14 +199,26 @@
       .filter(cb => cb.checked)
       .map(cb => cb.value);
 
-    document.querySelectorAll('[data-col]').forEach(col => {
-      const key = col.getAttribute('data-col');
-      col.style.display = selectedColumns.includes(key) ? '' : 'none';
+    // Get the DataTable instance
+    const dataTable = $('#myTable').DataTable();
+
+    // Loop through all columns in the DataTable
+    dataTable.columns().every(function () {
+      const column = this;
+      const columnHeader = $(column.header());
+      const key = columnHeader.attr('data-col'); // Get the data-col attribute from the header
+
+      if (key) { // Ensure data-col attribute exists
+        if (selectedColumns.includes(key)) {
+          column.visible(true); // Show the column
+        } else {
+          column.visible(false); // Hide the column
+        }
+      }
     });
 
     toggleFilterModal(false);
   });
 </script>
-</body>
 
 </html>

@@ -9,6 +9,7 @@ import createProductTable from './models/productModel.js';
 const initializeDb = async () => {
   try {
     // Test database connection
+    console.log()
     const connected = await testConnection();
     
     if (connected) {
