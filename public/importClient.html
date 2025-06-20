@@ -259,9 +259,20 @@
 
 
 </body>
+<script src="./js/GenericPost.js"></script>
 <script>
   lucide.createIcons();
- 
+
+  
+ document.getElementById('clientForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const data = getFormData('clientForm');  //  Generic usage
+  console.log('Submitting:', data);
+
+  const result = await postFormData('/api/individualData/data?tableName=clients', data); // Change API endpoint as needed
+});
+
 
 
   //import modal

@@ -14,6 +14,7 @@ import employeeRoute from './routes/employeeRoute.js'
 import productRoute from './routes/productRoute.js'
 import orderRoutes from './routes/orderRoutes.js'
 import TableRoutes from './routes/TableRoutes.js'
+import individualRoute from './routes/individualRoute.js'
 
 
 
@@ -36,6 +37,7 @@ app.use(express.static(staticPath));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/data' , filteredRoute )
+app.use('/api/individualData' , individualRoute )
 app.use('/api/clients' , clientRoute)
 app.use('/api/table' , TableRoutes )
 app.use('/api/employees' , employeeRoute)
@@ -102,7 +104,7 @@ app.get('/Client-Data', (req, res) => {
 });
 
 //emp data
-app.get('/Emp-Data', (req, res) => {
+app.get('/emp-Data', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'emp-table.html'));
 });
 
