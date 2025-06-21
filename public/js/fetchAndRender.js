@@ -1,6 +1,6 @@
 async function fetchAndRenderTable({ tableName, containerId, columns }) {
   try {
-    const response = await fetch("http://localhost:3000/api/table/Data", {
+    const response = await fetch("http://localhost/api/table/Data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

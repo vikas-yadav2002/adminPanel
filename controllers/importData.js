@@ -83,6 +83,7 @@ function isValidOrder(order) {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
+
 const ClientImport = async (req, res) => {
   const { clients } = req.body;
 
@@ -99,15 +100,9 @@ const ClientImport = async (req, res) => {
     }
   });
 
-  // Delay utility
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  // Optional artificial delay for simulating processing time
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
-  // Add a 5-second delay
-  await delay(5000);
-
-  // If there are invalid rows, return 422
   if (invalidRows.length > 0) {
     return res.status(422).json({
       message: 'Some rows are invalid.',
@@ -115,30 +110,50 @@ const ClientImport = async (req, res) => {
     });
   }
 
-  // Build the SQL string
+  // Prepare SQL query
+  const values = clients.map(client => [
+    client.id,
+    client.client_id,
+    client.name,
+    client.client_type,
+    client.city,
+    client.state,
+    client.contact_person,
+    client.phone,
+    client.email
+  ]);
+
+  const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+
   const sql = `
     INSERT INTO clients 
       (id, client_id, name, client_type, city, state, contact_person, phone, email)
     VALUES 
-      ${clients.map(client => 
-        `('${client.id}', '${client.client_id}', '${client.name}', '${client.client_type}', '${client.city}', '${client.state}', '${client.contact_person}', '${client.phone}', '${client.email}')`
-      ).join(",\n      ")};
+      ${placeholders}
   `;
 
-  console.log("Generated SQL:", sql); // Log only for debugging, remove in production
+  try {
+    const result = await query(sql, values.flat());
 
-  // Not executing the query for now
-  return res.status(200).json({
-    message: 'All clients are valid.',
-    sql,         // returning SQL for verification only
-    data: clients,
-  });
+    return res.status(200).json({
+      message: "Clients imported successfully.",
+      insertedRows: result.affectedRows,
+      data: clients
+    });
+
+  } catch (error) {
+    console.error("Database insertion error:", error);
+    return res.status(500).json({
+      error: "An error occurred while inserting clients.",
+      details: error.message
+    });
+  }
 };
 
 
 
 
-// Controller: Import Employees
+
 const EmployeeImport = async (req, res) => {
   const { employees } = req.body;
 
@@ -155,30 +170,58 @@ const EmployeeImport = async (req, res) => {
     }
   });
 
+  // Optional delay (for UI simulation)
   await new Promise(resolve => setTimeout(resolve, 5000));
 
   if (invalidRows.length > 0) {
-    return res.status(422).json({ message: 'Some rows are invalid.', invalidRows });
+    return res.status(422).json({
+      message: 'Some rows are invalid.',
+      invalidRows
+    });
   }
 
+  // Create SQL query
+  const values = employees.map(emp => [
+    emp.id,
+    emp.employee_id,
+    emp.name,
+    emp.username,
+    emp.password,
+    emp.designation,
+    emp.state,
+    emp.city,
+    emp.role
+  ]);
+
+  const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+
   const sql = `
-    INSERT INTO employees
+    INSERT INTO employees 
       (id, employee_id, name, username, password, designation, state, city, role)
-    VALUES
-      ${employees.map(emp => 
-        `('${emp.id}', '${emp.employee_id}', '${emp.name}', '${emp.username}', '${emp.password}', '${emp.designation}', '${emp.state}', '${emp.city}', '${emp.role}')`
-      ).join(',\n      ')};
+    VALUES 
+      ${placeholders};
   `;
 
-  console.log("Generated SQL for employees:", sql);
+  try {
+    const result = await query(sql, values.flat());
 
-  return res.status(200).json({ message: 'All employees are valid.', sql, data: employees });
+    return res.status(200).json({
+      message: "All employees inserted successfully.",
+      insertedCount: result.affectedRows,
+      data: employees
+    });
+
+  } catch (error) {
+    console.error("Insert error:", error);
+    return res.status(500).json({
+      error: "An error occurred while inserting employees.",
+      details: error.message
+    });
+  }
 };
 
 
 
-
-// Controller: Import Products
 const ProductImport = async (req, res) => {
   const { products } = req.body;
 
@@ -195,26 +238,52 @@ const ProductImport = async (req, res) => {
     }
   });
 
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 2000)); // 2-second delay
 
   if (invalidRows.length > 0) {
-    return res.status(422).json({ message: 'Some rows are invalid.', invalidRows });
+    return res.status(422).json({
+      message: 'Some rows are invalid.',
+      invalidRows
+    });
   }
+
+  const values = products.map(prod => [
+    prod.id,
+    prod.product_id,
+    prod.name,
+    prod.category,
+    prod.manufacturer || null, // optional field
+    prod.description || null,  // optional field
+    prod.price,
+    prod.stock_quantity
+  ]);
+
+  const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
 
   const sql = `
     INSERT INTO products
       (id, product_id, name, category, manufacturer, description, price, stock_quantity)
     VALUES
-      ${products.map(prod => 
-        `('${prod.id}', '${prod.product_id}', '${prod.name}', '${prod.category}', '${prod.manufacturer}', '${prod.description}', '${prod.price}', '${prod.stock_quantity}')`
-      ).join(',\n      ')};
+      ${placeholders};
   `;
 
-  console.log("Generated SQL for products:", sql);
+  try {
+    const result = await query(sql, values.flat());
 
-  return res.status(200).json({ message: 'All products are valid.', sql, data: products });
+    return res.status(200).json({
+      message: "All products inserted successfully.",
+      insertedCount: result.affectedRows,
+      data: products
+    });
+
+  } catch (error) {
+    console.error("Insert error:", error);
+    return res.status(500).json({
+      error: "An error occurred while inserting products.",
+      details: error.message
+    });
+  }
 };
-
 
 const OrderImport = async (req, res) => {
   const { orders } = req.body;
@@ -232,11 +301,10 @@ const OrderImport = async (req, res) => {
     }
   });
 
-  // Optional delay for demo
+  // Delay (optional)
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
   await delay(5000);
 
-  // Return errors if validation failed
   if (invalidRows.length > 0) {
     return res.status(422).json({
       message: 'Some rows are invalid.',
@@ -244,23 +312,45 @@ const OrderImport = async (req, res) => {
     });
   }
 
-  // Build SQL query
+  // Prepare values
+  const values = orders.map(order => [
+    order.id,
+    order.order_id,
+    order.client_id,
+    order.employee_id,
+    order.order_date,
+    order.total_amount,
+    order.status,
+    order.notes || null,
+    order.created_at,
+    order.updated_at
+  ]);
+
+  const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+
   const sql = `
     INSERT INTO orders 
       (id, order_id, client_id, employee_id, order_date, total_amount, status, notes, created_at, updated_at)
     VALUES 
-      ${orders.map(order =>
-        `('${order.id}', '${order.order_id}', '${order.client_id}', '${order.employee_id}', '${order.order_date}', ${order.total_amount}, '${order.status}', '${order.notes}', '${order.created_at}', '${order.updated_at}')`
-      ).join(',\n      ')};
+      ${placeholders};
   `;
 
-  console.log("Generated SQL:", sql); // Debug only
+  try {
+    const result = await query(sql, values.flat());
 
-  return res.status(200).json({
-    message: 'All orders are valid.',
-    sql,
-    data: orders,
-  });
+    return res.status(200).json({
+      message: 'All orders inserted successfully.',
+      insertedCount: result.affectedRows,
+      data: orders
+    });
+
+  } catch (error) {
+    console.error("Order insert error:", error);
+    return res.status(500).json({
+      error: "An error occurred while inserting orders.",
+      details: error.message
+    });
+  }
 };
 
 
