@@ -15,6 +15,8 @@ import productRoute from './routes/productRoute.js'
 import orderRoutes from './routes/orderRoutes.js'
 import TableRoutes from './routes/TableRoutes.js'
 import individualRoute from './routes/individualRoute.js'
+import schema from './routes/schemaRoute.js'
+import queryRoutes from './routes/queryRoutes.js'
 
 
 
@@ -43,6 +45,8 @@ app.use('/api/table' , TableRoutes )
 app.use('/api/employees' , employeeRoute)
 app.use('/api/product' , productRoute)
 app.use('/api/orders' , orderRoutes);
+app.use('/api/schema' , schema );
+app.use('/api/query' , queryRoutes)
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -86,6 +90,9 @@ app.get('/importClient', (req, res) => {
 //importProduct
 app.get('/importProduct', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'importProduct.html'));
+});
+app.get('/Query', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'query.html'));
 });
 
 

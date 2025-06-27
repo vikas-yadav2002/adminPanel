@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SQL Query Box</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS + JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+ 
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen p-0 m-0">
+  <!-- Navbar -->
+  <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow-md">
+    <!-- Left: Navigation Links -->
+    <div class="flex items-center gap-6">
+      <!-- Dashboard -->
+      <a href="/dashboard" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+        <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+      </a>
+
+      <!-- Data Table Dropdown -->
+      <div class="relative group">
+        <button class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+          <i data-lucide="upload-cloud" class="w-5 h-5"></i> Data Table
+          <i data-lucide="chevron-down" class="w-4 h-4"></i>
+        </button>
+        <div class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-52">
+          <a href="emp-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <i data-lucide="user-plus" class="w-4 h-4"></i> Employee Table
+          </a>
+          <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <i data-lucide="users" class="w-4 h-4"></i> Client Table
+          </a>
+          <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <i data-lucide="package" class="w-4 h-4"></i> Product Table
+          </a>
+          <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+            <i data-lucide="package-search" class="w-4 h-4"></i> Order Table
+          </a>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <a href="./filter.html" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+        <i data-lucide="filter" class="w-5 h-5"></i> Filter Data
+      </a>
+    </div>
+
+    <!-- Right: Profile -->
+    <div class="flex items-center gap-4">
+      <div
+        class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] font-semibold cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500">
+        <i data-lucide="user" class="w-5 h-5"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SQL Query Container -->
+  <main class="p-6 w-full mx-auto mt-6 bg-gray-800 shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-4">Run SQL Query</h1>
+
+    <!-- SQL Editor -->
+    <div class="relative">
+      <textarea id="sql-editor" rows="6"
+        class="w-full border border-gray-700 rounded-lg p-4 bg-gray-900 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Type your SQL here..."></textarea>
+      <ul id="autocomplete-list"
+        class="absolute bg-gray-700 border border-gray-600 rounded-md mt-1 max-h-40 overflow-auto hidden w-full z-10 text-gray-100 shadow-lg">
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-4 flex items-center gap-4">
+      <button id="run-query"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Run Query
+      </button>
+      <button id="refresh-schema"
+        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+        Refresh Schema
+      </button>
+      <button id="view-schema"
+         class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+         View Schema
+      </button>
+
+    </div>
+
+    <!-- Assist Panel -->
+    <div id="assist-panel" class="mt-4">
+      <div id="error-list" class="text-red-500 text-sm"></div>
+      <div id="suggestions" class="text-green-400 text-sm"></div>
+    </div>
+
+    <!-- Query Results -->
+    <div id="results" class="mt-6">
+      <h2 class="text-xl font-medium mb-2">Results</h2>
+      <div id="results-container"
+        class="bg-gray-900 border border-gray-700 text-gray-100 p-3 rounded-lg overflow-auto max-h-[500px] min-h-[100px]">
+        <div class="flex flex-col items-center justify-center text-center space-y-2 h-full min-h-[150px]">
+         <i data-lucide="database" class="w-8 h-8 text-gray-500"></i>
+         <p class="text-gray-400 font-medium text-sm">No queries yet!</p>
+         <p class="text-gray-600 text-xs">Type and run a SQL query to see results here.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+
+
+<!-- Dark-Themed Schema Modal -->
+<div id="schema-modal"
+  class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50">
+  <div class="bg-gray-900 text-white rounded-xl w-[90%] max-w-5xl p-6 overflow-auto max-h-[85vh] shadow-2xl border border-gray-700 relative">
+
+    <!-- Close Button -->
+    <button id="close-schema-modal"
+      class="absolute top-3 right-4 text-gray-400 hover:text-white text-2xl font-bold focus:outline-none">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-bold mb-4 text-indigo-400 border-b border-gray-700 pb-2">
+      📘 Database Schema Overview
+    </h2>
+
+    <div id="schema-content" class="space-y-6 text-sm">
+      <!-- Dynamic table-wise schema will be injected here -->
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Load Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+      
+    lucide.createIcons();
+//
+      // Modal open/close
+  const viewSchemaBtn = document.getElementById('view-schema');
+  const schemaModal = document.getElementById('schema-modal');
+  const closeModalBtn = document.getElementById('close-schema-modal');
+  const schemaContentDiv = document.getElementById('schema-content');
+
+  viewSchemaBtn.addEventListener('click', () => {
+    if (!schema || Object.keys(schema).length === 0) {
+      schemaContentDiv.innerHTML = '<p class="text-red-500">Schema not loaded. Please refresh schema first.</p>';
+    } else {
+      renderSchema();
+    }
+    schemaModal.classList.remove('hidden');
+  });
+
+  closeModalBtn.addEventListener('click', () => {
+    schemaModal.classList.add('hidden');
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === schemaModal) {
+      schemaModal.classList.add('hidden');
+    }
+  });
+
+  function renderSchema() {
+  schemaContentDiv.innerHTML = Object.entries(schema).map(([table, columns]) => {
+    const rows = columns.map(col => `
+      <tr>
+        <td class="border-b border-gray-700 px-3 py-2 text-gray-200 hover:text-white transition-colors duration-150">
+          ${col.name}
+        </td>
+      </tr>
+    `).join('');
+
+    return `
+      <div class="bg-gray-800 rounded-lg shadow-md p-4 border border-gray-700">
+        <h3 class="text-lg font-semibold text-indigo-300 mb-3">${table}</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border-collapse text-left text-sm">
+            <thead>
+              <tr>
+                <th class="bg-gray-700 text-gray-300 px-3 py-2 border-b border-gray-600">Column Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+
+
+
+
+
+
+    //
+    let selectedSuggestionIndex = -1;
+    let schema = {};
+    const SQL_KEYWORDS = [
+      'SELECT', 'FROM', 'WHERE', 'JOIN', 'INSERT', 'UPDATE',
+      'DELETE', 'GROUP BY', 'ORDER BY', 'AND', 'OR', 'NOT', 'NULL', 'AS',
+      'CREATE', 'ALTER', 'DROP', 'TABLE', 'DATABASE', 'INDEX', 'VIEW',
+      'FUNCTION', 'PROCEDURE', 'UNION', 'ALL', 'DISTINCT', 'COUNT', 'SUM',
+      'AVG', 'MIN', 'MAX', 'HAVING', 'LIMIT', 'OFFSET', 'LIKE', 'IN', 'BETWEEN'
+    ];
+
+    // Fetch schema
+    async function loadSchema() {
+      try {
+        const res = await fetch('http://localhost:3000/api/schema/getSchema');
+        schema = await res.json();
+        console.log('Schema loaded', schema);
+      } catch (err) {
+        console.error('Failed to load schema', err);
+        document.getElementById('suggestions').innerHTML = '<div class="text-red-500">Failed to load schema. Check console for details.</div>';
+      }
+    }
+
+    function showAutocomplete(prefix) {
+      const list = document.getElementById('autocomplete-list');
+      list.innerHTML = '';
+      if (!prefix) {
+        list.classList.add('hidden');
+        return;
+      }
+
+      const tokens = [...SQL_KEYWORDS];
+      for (const tbl in schema) {
+        tokens.push(tbl);
+        if (Array.isArray(schema[tbl])) {
+          schema[tbl].forEach(col => col?.name && tokens.push(col.name));
+        }
+      }
+
+      const filtered = tokens.filter(t =>
+        t.toLowerCase().startsWith(prefix.toLowerCase())
+      ).sort(); // Sort for consistent order
+
+      if (!filtered.length) {
+        list.classList.add('hidden');
+        return;
+      }
+
+      filtered.slice(0, 10).forEach(token => {
+        const item = document.createElement('li');
+        item.textContent = token;
+        // Dark mode hover state for autocomplete items
+        item.className = 'px-3 py-1 hover:bg-gray-600 cursor-pointer';
+        item.onclick = () => insertAtCursor(token);
+        list.appendChild(item);
+      });
+      list.classList.remove('hidden');
+      selectedSuggestionIndex = -1;
+
+    }
+
+    function insertAtCursor(token) {
+  const editor = document.getElementById('sql-editor');
+  const cursor = editor.selectionStart;
+  const text = editor.value;
+
+  // Find start of current word (prefix)
+  const prefixMatch = text.substring(0, cursor).match(/(\w+)$/);
+  const prefixStart = prefixMatch ? cursor - prefixMatch[1].length : cursor;
+
+  // Replace the prefix with selected token
+  const newText =
+    text.substring(0, prefixStart) + token + text.substring(cursor);
+
+  editor.value = newText;
+  editor.selectionStart = editor.selectionEnd = prefixStart + token.length;
+  editor.focus();
+
+  document.getElementById('autocomplete-list').classList.add('hidden');
+
+}
+
+
+   
+    function displayAssist({ errors = [], suggestions = [] }) {
+      const errEl = document.getElementById('error-list');
+      const sugEl = document.getElementById('suggestions');
+      errEl.innerHTML = errors.map(e => `<div>❗ ${e.message}</div>`).join('');
+      sugEl.innerHTML = suggestions.map(s => `<div>💡 ${s}</div>`).join('');
+    }
+
+    
+    async function runQuery() {
+  const sql = document.getElementById('sql-editor').value;
+  const container = document.getElementById('results-container');
+  container.innerHTML = '<div class="text-gray-400">Running query...</div>';
+
+  try {
+    const response = await fetch('http://localhost:3000/api/query/runQuery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sql })
+    });
+
+    const res = await response.json();
+    console.log('Query result:', res);
+
+    if (res.error) {
+      container.innerHTML = `<div class="text-red-500 p-2 border border-red-700 rounded">${res.error}</div>`;
+      return;
+    }
+
+    if (res.rows && res.rows.length > 0) {
+      const headers = Object.keys(res.rows[0]);
+
+      const table = document.createElement('table');
+      table.id = 'queryTable';
+      table.className = 'display w-full text-sm text-gray-100';
+
+      table.innerHTML = `
+        <thead class="bg-gray-700">
+          <tr>${headers.map(h => `<th class="px-4 py-2 text-left font-semibold">${h}</th>`).join('')}</tr>
+        </thead>
+        <tbody class="divide-y divide-gray-600">
+          ${res.rows.map(row =>
+            `<tr>${headers.map(h => `<td class="px-4 py-2">${row[h]}</td>`).join('')}</tr>`
+          ).join('')}
+        </tbody>
+      `;
+
+      container.innerHTML = '';
+      container.appendChild(table);
+
+      // Initialize DataTable after DOM updates
+      setTimeout(() => {
+        const tableRef = $('#queryTable');
+        if ($.fn.dataTable.isDataTable(tableRef)) {
+          tableRef.DataTable().destroy();
+        }
+        tableRef.DataTable({
+          pageLength: 10,
+          responsive: true,
+          autoWidth: false
+        });
+      }, 0);
+
+    } else {
+      container.innerHTML = '<div class="text-gray-500 p-2">No results found.</div>';
+    }
+
+  } catch (err) {
+    container.innerHTML = `<div class="text-red-500 p-2 border border-red-700 rounded">Query failed: ${err.message}</div>`;
+    console.error('Query execution error:', err);
+  }
+}
+
+
+
+    document.getElementById('sql-editor').addEventListener('input', e => {
+      const editor = e.target;
+      const cursorPosition = editor.selectionStart;
+      const textUntilCursor = editor.value.substring(0, cursorPosition);
+      const lastWordMatch = textUntilCursor.match(/(\w+)$/); // Get the last word before the cursor
+      const word = lastWordMatch ? lastWordMatch[1] : '';
+      showAutocomplete(word);
+
+    });
+    
+
+ document.getElementById('sql-editor').addEventListener('keydown', e => {
+  const list = document.getElementById('autocomplete-list');
+  const items = Array.from(list.children);
+
+  if (list.classList.contains('hidden') || items.length === 0) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+    updateSuggestionHighlight(items);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+    updateSuggestionHighlight(items);
+  } else if (e.key === 'Enter') {
+    if (selectedSuggestionIndex >= 0) {
+      e.preventDefault();
+      items[selectedSuggestionIndex].click(); // Triggers insertion
+    }
+  } else if (e.key === 'Escape') {
+    list.classList.add('hidden');
+  }
+});
+
+    document.getElementById('run-query').addEventListener('click', runQuery);
+    document.getElementById('refresh-schema').addEventListener('click', loadSchema);
+
+    // Close autocomplete list when clicking outside
+    document.addEventListener('click', (e) => {
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const sqlEditor = document.getElementById('sql-editor');
+        if (!autocompleteList.contains(e.target) && !sqlEditor.contains(e.target)) {
+            autocompleteList.classList.add('hidden');
+        }
+    });
+
+    // Call once on page load
+    window.addEventListener('DOMContentLoaded', loadSchema);
+    function updateSuggestionHighlight(items) {
+  items.forEach((item, idx) => {
+    if (idx === selectedSuggestionIndex) {
+      item.classList.add('bg-blue-600', 'text-white');
+    } else {
+      item.classList.remove('bg-blue-600', 'text-white');
+    }
+  });
+}
+
+  </script>
+</body>
+</html>

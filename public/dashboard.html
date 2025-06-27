@@ -76,10 +76,20 @@
       </div>
     </div>
   </nav>
-    <div id="usernameGreetings" class="text-black text-xl font-bold m-4">
-  Hello,
-  <span id="userName" class="text-indigo-400 underline underline-offset-4">User</span>
+    <div class="m-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <!-- Greeting -->
+  <div id="usernameGreetings" class="text-gray-900 text-xl font-semibold">
+    Hello,
+    <span id="userName" class="text-indigo-400 underline underline-offset-4">User</span>
+  </div>
+
+  <!-- Redirect Button -->
+  <a href="/query" 
+     class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-medium shadow-md">
+    Go to Query Page →
+  </a>
 </div>
+
 
     <script>
       lucide.createIcons();
