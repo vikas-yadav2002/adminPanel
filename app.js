@@ -91,6 +91,8 @@ app.get('/importClient', (req, res) => {
 app.get('/importProduct', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'importProduct.html'));
 });
+
+// Query page
 app.get('/Query', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'query.html'));
 });

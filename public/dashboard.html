@@ -1,114 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Icon Navbar</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="./js/auth.js"></script>
-    <style>
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="./js/auth.js"></script>
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
 
-    
-  </head>
-  <body class="bg-gray-100">
-
-    <!-- Navbar -->
-    <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow">
+  <!-- Navbar -->
+  <nav class="bg-[#1f263e] text-white px-6 py-4 flex justify-between items-center shadow-md">
     <!-- Left Section -->
-    <div class="flex items-center gap-6">
-      <!-- Dashboard -->
-      <a href="/dashboard" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+    <div class="flex items-center gap-4 md:gap-6">
+      <a href="/dashboard" class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#2c3654] transition">
         <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-        Dashboard
+        <span class="hidden sm:inline">Dashboard</span>
       </a>
 
-      <!-- Data Table Dropdown -->
       <div class="relative group">
-        <button class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+        <button class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#2c3654] transition">
           <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-          Data Table
+          <span class="hidden sm:inline">Data Table</span>
           <i data-lucide="chevron-down" class="w-4 h-4"></i>
         </button>
-        <div
-          class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-48 top-[30px]">
-          <a href="emp-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+        <div class="absolute z-10 hidden group-hover:block bg-white text-black mt-2 rounded-md shadow-lg w-48 animate-fade-in">
+          <a href="emp-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             Employee Table
           </a>
-          <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="client-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition">
             <i data-lucide="users" class="w-4 h-4"></i>
-            client Table
+            Client Table
           </a>
-          <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
+          <a href="product-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition">
             <i data-lucide="package-plus" class="w-4 h-4"></i>
-            products Table
+            Products Table
           </a>
-          <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100">
-              <i data-lucide="package-plus" class="w-4 h-4"></i>
-              orders Table
-            </a>
+          <a href="order-Data" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            Orders Table
+          </a>
         </div>
       </div>
 
-      <!-- Filter Data -->
-      <a href="./filter.html" class="flex items-center gap-2 hover:bg-[#2c3654] px-3 py-2 rounded-md">
+      <a href="./filter.html" class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#2c3654] transition">
         <i data-lucide="filter" class="w-5 h-5"></i>
-        Filter Data
+        <span class="hidden sm:inline">Filter Data</span>
       </a>
     </div>
 
     <!-- Right Section -->
     <div class="flex items-center gap-4">
-      <!-- Profile Icon -->
-      <div
-        class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] font-semibold cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500">
+      <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1f263e] cursor-pointer hover:ring-2 ring-offset-2 ring-indigo-500 transition">
         <i data-lucide="user" class="w-5 h-5"></i>
       </div>
     </div>
   </nav>
-    <div class="m-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-  <!-- Greeting -->
-  <div id="usernameGreetings" class="text-gray-900 text-xl font-semibold">
-    Hello,
-    <span id="userName" class="text-indigo-400 underline underline-offset-4">User</span>
-  </div>
 
-  <!-- Redirect Button -->
-  <a href="/query" 
-     class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 text-sm font-medium shadow-md">
-    Go to Query Page →
-  </a>
-</div>
+  <!-- Greeting + Button -->
+  <section class="m-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
+    <div id="usernameGreetings" class="text-xl font-semibold text-gray-900">
+      Hello, <span id="userName" class="text-indigo-500 underline underline-offset-4">User</span>
+    </div>
+    <a href="/query"
+       class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 text-sm font-medium shadow">
+      Go to Query Page →
+    </a>
+  </section>
 
+  <!-- Dummy Content Section -->
+  <main class="flex-1 px-6 pb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-fade-in">
+      <!-- Dummy Cards -->
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 1</div>
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 2</div>
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 3</div>
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 4</div>
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 5</div>
+      <div class="bg-white rounded-xl shadow p-6 h-40 flex items-center justify-center text-gray-500">Placeholder 6</div>
+    </div>
+  </main>
 
-    <script>
-      lucide.createIcons();
-    </script>
-    
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
 
-<script>
-  const nameSpan = document.getElementById('userName');
-  const stored = localStorage.getItem('token');
+    const nameSpan = document.getElementById('userName');
+    const stored = localStorage.getItem('token');
 
-  if (!stored) {
-    window.location.href = '/'; // redirect if not logged in
-  } else {
-    const data = JSON.parse(stored);
-    const name = data?.user?.name || "User";
-    nameSpan.innerText = name;
-  }
-</script>
-
-
-  </body>
+    if (!stored) {
+      window.location.href = '/';
+    } else {
+      const data = JSON.parse(stored);
+      const name = data?.user?.name || "User";
+      nameSpan.innerText = name;
+    }
+  </script>
+</body>
 </html>
