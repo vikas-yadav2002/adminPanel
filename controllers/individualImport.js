@@ -1,8 +1,9 @@
-const individualImport = (req, res) => {
-  const tableName = req.query.tableName || req.body.tableName;
-  const formData = req.body;
+import { query } from '../config/db.js';
 
-  // Remove tableName from data if passed in body
+const individualImport = async (req, res) => {
+  const tableName = req.query.tableName || req.body.tableName;
+  const formData = { ...req.body };
+
   delete formData.tableName;
 
   if (!tableName || Object.keys(formData).length === 0) {
@@ -12,20 +13,36 @@ const individualImport = (req, res) => {
     });
   }
 
-  // Extract column names and values
   const columns = Object.keys(formData).map(col => `\`${col}\``).join(', ');
   const values = Object.values(formData).map(val => `'${val}'`).join(', ');
+  const updateClause = Object.keys(formData)
+    .map(col => `\`${col}\` = VALUES(\`${col}\`)`)
+    .join(', ');
 
-  // Construct mock SQL query
-  const sql = `INSERT INTO \`${tableName}\` (${columns}) VALUES (${values});`;
+  const sql = `
+    INSERT INTO \`${tableName}\` (${columns}) 
+    VALUES (${values}) 
+    ON DUPLICATE KEY UPDATE ${updateClause};
+  `;
 
-  // Return mock SQL and data
-  return res.status(200).json({
-    success: true,
-    message: `Mock SQL generated for table: ${tableName}`,
-    sql: sql,
-    data: formData
-  });
+  try {
+    const result = await query(sql);
+
+    return res.status(200).json({
+      success: true,
+      message: `Data inserted or updated in table: ${tableName}`,
+      affectedRows: result.affectedRows,
+      data: formData,
+      sql
+    });
+  } catch (error) {
+    console.error("DB insert/update error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Database error",
+      error: error.message
+    });
+  }
 };
 
 export default individualImport;
