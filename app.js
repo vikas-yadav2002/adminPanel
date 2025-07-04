@@ -17,6 +17,7 @@ import TableRoutes from './routes/TableRoutes.js'
 import individualRoute from './routes/individualRoute.js'
 import schema from './routes/schemaRoute.js'
 import queryRoutes from './routes/queryRoutes.js'
+import deleteRoute from './routes/deleteRoute.js'
 
 
 
@@ -47,6 +48,7 @@ app.use('/api/product' , productRoute)
 app.use('/api/orders' , orderRoutes);
 app.use('/api/schema' , schema );
 app.use('/api/query' , queryRoutes)
+app.use("/api/delete" , deleteRoute)
 
 
 const __filename = fileURLToPath(import.meta.url);

@@ -142,62 +142,70 @@
     <h2 class="text-2xl font-semibold mb-6 text-gray-800">Add Order Data</h2>
 
     <form id="orderForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Client ID -->
-      <div>
-        <label for="clientId" class="block mb-1 font-medium text-gray-700">Client ID</label>
-        <input type="text" id="clientId" name="clientId" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-      </div>
+  <!-- Order ID -->
+  <div>
+    <label for="order_id" class="block mb-1 font-medium text-gray-700">Order ID</label>
+    <input type="text" id="order_id" name="order_id" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  </div>
 
-      <!-- Employee ID -->
-      <div>
-        <label for="employeeId" class="block mb-1 font-medium text-gray-700">Employee ID</label>
-        <input type="text" id="employeeId" name="employeeId" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-      </div>
+  <!-- Client ID -->
+  <div>
+    <label for="client_id" class="block mb-1 font-medium text-gray-700">Client ID</label>
+    <input type="text" id="client_id" name="client_id" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  </div>
 
-      <!-- Order Date -->
-      <div>
-        <label for="orderDate" class="block mb-1 font-medium text-gray-700">Order Date</label>
-        <input type="date" id="orderDate" name="orderDate" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-      </div>
+  <!-- Employee ID -->
+  <div>
+    <label for="employee_id" class="block mb-1 font-medium text-gray-700">Employee ID</label>
+    <input type="text" id="employee_id" name="employee_id" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  </div>
 
-      <!-- Total Amount -->
-      <div>
-        <label for="totalAmount" class="block mb-1 font-medium text-gray-700">Total Amount</label>
-        <input type="number" id="totalAmount" name="totalAmount" step="0.01" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-      </div>
+  <!-- Order Date -->
+  <div>
+    <label for="order_date" class="block mb-1 font-medium text-gray-700">Order Date</label>
+    <input type="date" id="order_date" name="order_date" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  </div>
 
-      <!-- Status -->
-      <div>
-        <label for="status" class="block mb-1 font-medium text-gray-700">Status</label>
-        <select id="status" name="status" required
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="" disabled selected>Select status</option>
-          <option value="Pending">Pending</option>
-          <option value="Processing">Processing</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-      </div>
+  <!-- Total Amount -->
+  <div>
+    <label for="total_amount" class="block mb-1 font-medium text-gray-700">Total Amount</label>
+    <input type="number" id="total_amount" name="total_amount" step="0.01" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  </div>
 
-      <!-- Notes (Full Width) -->
-      <div class="md:col-span-2">
-        <label for="notes" class="block mb-1 font-medium text-gray-700">Notes (Optional)</label>
-        <textarea id="notes" name="notes" rows="3"
-          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-      </div>
+  <!-- Status -->
+  <div>
+    <label for="status" class="block mb-1 font-medium text-gray-700">Status</label>
+    <select id="status" name="status" required
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <option value="" disabled selected>Select status</option>
+      <option value="Pending">Pending</option>
+      <option value="Processing">Processing</option>
+      <option value="Completed">Completed</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+  </div>
 
-      <!-- Submit Button (Full Width) -->
-      <div class="md:col-span-2">
-        <button type="submit"
-          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition">
-          Add Order
-        </button>
-      </div>
+  <!-- Notes (Full Width) -->
+  <div class="md:col-span-2">
+    <label for="notes" class="block mb-1 font-medium text-gray-700">Notes (Optional)</label>
+    <textarea id="notes" name="notes" rows="3"
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+  </div>
+
+  <!-- Submit Button (Full Width) -->
+  <div class="md:col-span-2">
+    <button type="submit"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition">
+      Add Order
+    </button>
+  </div>
     </form>
+
   </div>
 
   <!-- Order Data Table Section -->

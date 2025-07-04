@@ -20,6 +20,7 @@
   <script src="./js/renderTable.js"></script>
   <script src="./js/fetchAndRender.js"></script>
   <script src="./js/filterAndRender.js"></script>
+  <script src="./js/deleteRow.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const columns = [
@@ -35,7 +36,8 @@
       fetchAndRenderTable({
         tableName: "employees",
         containerId: "myTable",
-        columns
+        columns ,
+        primaryKey : "employee_id",
       });
 
       setupFilter(columns);
@@ -112,6 +114,7 @@
           <th data-col="state">State</th>
           <th data-col="city">City</th>
           <th data-col="role">Role</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>

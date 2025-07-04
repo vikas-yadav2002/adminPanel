@@ -23,9 +23,11 @@
   <script src="./js/renderTable.js"></script>
   <script src="./js/fetchAndRender.js"></script>
   <script src="./js/filterAndRender.js"></script>
+   <script src="./js/deleteRow.js"></script>
  <script>
 document.addEventListener("DOMContentLoaded", () => {
   const columns = [
+    {key : "client_id" , label : "ClientId"},
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
     { key: "phone", label: "Phone" },
@@ -38,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchAndRenderTable({
     tableName: "clients",
     containerId: "myTable",
-    columns
+    columns ,
+    primaryKey : "client_id",
   });
 
   setupFilter(columns);
@@ -120,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <table id="myTable" class="display">
   <thead>
   <tr>
+    <th data-col="clientId">Client ID</th>
     <th data-col="name">Name</th>
     <th data-col="email">Email</th>
     <th data-col="phone">Phone</th>
@@ -127,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <th data-col="city">City</th>
     <th data-col="state">State</th>
     <th data-col="contact_person">Contact Person</th>
+    <th>Actions</th>
   </tr>
 </thead>
 
