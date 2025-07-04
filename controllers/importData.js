@@ -125,12 +125,26 @@ const ClientImport = async (req, res) => {
 
   const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
 
+  // Define update clause for ON DUPLICATE KEY
+  const updateClause = `
+    name = VALUES(name),
+    client_type = VALUES(client_type),
+    city = VALUES(city),
+    state = VALUES(state),
+    contact_person = VALUES(contact_person),
+    phone = VALUES(phone),
+    email = VALUES(email)
+  `;
+
   const sql = `
     INSERT INTO clients 
       (id, client_id, name, client_type, city, state, contact_person, phone, email)
     VALUES 
       ${placeholders}
+    ON DUPLICATE KEY UPDATE 
+      ${updateClause};
   `;
+
 
   try {
     const result = await query(sql, values.flat());
@@ -194,12 +208,28 @@ const EmployeeImport = async (req, res) => {
   ]);
 
   const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+  
+   // Create ON DUPLICATE KEY UPDATE clause
+  const updateFields = [
+    'name = VALUES(name)',
+    'username = VALUES(username)',
+    'password = VALUES(password)',
+    'designation = VALUES(designation)',
+    'state = VALUES(state)',
+    'city = VALUES(city)',
+    'role = VALUES(role)'
+  ].join(', ');
 
+
+  // new sql query with ON DUPLICATE KEY UPDATE
+  // This will insert new records or update existing ones based on the unique key (employee_id
   const sql = `
     INSERT INTO employees 
       (id, employee_id, name, username, password, designation, state, city, role)
     VALUES 
-      ${placeholders};
+      ${placeholders}
+    ON DUPLICATE KEY UPDATE 
+      ${updateFields};
   `;
 
   try {
@@ -261,11 +291,19 @@ const ProductImport = async (req, res) => {
   const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
 
   const sql = `
-    INSERT INTO products
-      (id, product_id, name, category, manufacturer, description, price, stock_quantity)
-    VALUES
-      ${placeholders};
-  `;
+  INSERT INTO products
+    (id, product_id, name, category, manufacturer, description, price, stock_quantity)
+  VALUES
+    ${placeholders}
+  ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    category = VALUES(category),
+    manufacturer = VALUES(manufacturer),
+    description = VALUES(description),
+    price = VALUES(price),
+    stock_quantity = VALUES(stock_quantity);
+`;
+
 
   try {
     const result = await query(sql, values.flat());
@@ -329,11 +367,20 @@ const OrderImport = async (req, res) => {
   const placeholders = values.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
 
   const sql = `
-    INSERT INTO orders 
-      (id, order_id, client_id, employee_id, order_date, total_amount, status, notes, created_at, updated_at)
-    VALUES 
-      ${placeholders};
-  `;
+  INSERT INTO orders 
+    (id, order_id, client_id, employee_id, order_date, total_amount, status, notes, created_at, updated_at)
+  VALUES 
+    ${placeholders}
+  ON DUPLICATE KEY UPDATE
+    client_id = VALUES(client_id),
+    employee_id = VALUES(employee_id),
+    order_date = VALUES(order_date),
+    total_amount = VALUES(total_amount),
+    status = VALUES(status),
+    notes = VALUES(notes),
+    updated_at = VALUES(updated_at);
+`;
+
 
   try {
     const result = await query(sql, values.flat());
