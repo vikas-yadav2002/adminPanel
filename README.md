@@ -1,6 +1,6 @@
 # Express MySQL API
 
-A structured Express application with MySQL and JWT authentication.
+A structured Express.js application integrated with MySQL and secured with JWT authentication.
 
 ## Project Overview
 
@@ -10,94 +10,131 @@ This API provides endpoints for managing employees, clients, products, and order
 
 - JWT-based authentication
 - MySQL database integration
-- Filtered data retrieval for all resources
 - RESTful API architecture
-- Clean separation of concerns (MVC pattern)
+- Clean MVC project structure
 - Secure route protection
+- Flexible setup (with Docker or local MySQL)
+- Sample data loaded from `my_database.sql`
 
-## Project Structure
 
-```
-root/
-├── controllers/         --> Business logic
-├── models/              --> Database schemas
-├── routes/              --> API routes
-├── config/              --> Configuration
-├── middlewares/         --> Custom middlewares
-├── app.js               --> Main application
-├── index.js             --> Entry point
-├── .env                 --> Environment variables
-└── package.json         --> Project dependencies
-```
 
 ## Getting Started
 
+You can set up the project using either:
+
+- ✅ **Docker** (recommended)
+- ✅ **Manual setup** (local MySQL)
+
+---
+
+## 🐳 Option 1: Docker Setup (MySQL + phpMyAdmin)
+
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- MySQL (v5.7 or higher)
+- Docker installed on your system
 
-### Installation
+### Step-by-step Instructions
 
-1. Clone the repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Configure environment variables:
-   - Copy `.env.example` to `.env` and update the values
-   - Set your MySQL credentials and JWT secret
+1. **Create Docker Network** (if not already created)
 
-4. Run the application:
-   ```
-   npm run dev
-   ```
+   ```bash
+   docker network create mynetwork
+ ### Run MySQL Container
 
-## API Endpoints
+```bash
+docker run -d --name mysql-container 
+  --network mynetwork 
+  -e MYSQL_ROOT_PASSWORD=rootpassword 
+  -e MYSQL_DATABASE=my_database 
+  -p 3306:3306 
+  mysql:latest
+```
+### Import the SQL Dump
 
-### Authentication
+#### Once the container is running, run this command to load the data:
 
-- `POST /api/auth/login` - Authenticate a user with username and password
+```bash
+docker exec -i mysql-container mysql -uroot -prootpassword my_database < my_database.sql>
+```
+#### Make sure my_database.sql is in the root directory of your project.
 
-### Employees
+### Run phpMyAdmin Container
 
-- `GET /api/employees` - Get all employees
-  - Query parameters:
-    - `designation` - Filter by designation (e.g., ZSM)
-    - `state` - Filter by state (e.g., Delhi)
-- `GET /api/employees/:id` - Get a specific employee
+```bash
+docker run -d --name phpmyadmin 
+  --network mynetwork 
+  -e PMA_HOST=mysql-container 
+  -e PMA_USER=root 
+  -e PMA_PASSWORD=rootpassword 
+  -p 8080:80 
+  phpmyadmin/phpmyadmin
+```
+`` Visit: http://localhost:8080``
 
-### Clients
+### Configure .env
 
-- `GET /api/clients` - Get all clients
-  - Query parameters:
-    - `city` - Filter by city (e.g., Tilak Nagar)
-    - `type` - Filter by client type (e.g., Retailer Non BA)
-- `GET /api/clients/:id` - Get a specific client
+#### Create a .env file in your project root Similar to the env.sample or with:
 
-### Products
+```bash
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=rootpassword
+DB_NAME=my_database
+DB_PORT=3306
 
-- `GET /api/products` - Get all products
-  - Query parameters:
-    - `category` - Filter by category (e.g., Eye)
-    - `manufacturer` - Filter by manufacturer (e.g., Swiss Beauty)
-- `GET /api/products/:id` - Get a specific product
+JWT_SECRET=your_jwt_secret
+```
+### Install Node.js Dependencies
 
-### Orders
+```bash
+npm install
+```
 
-- `GET /api/orders` - Get all orders
-  - Query parameters:
-    - `date` - Filter by date (e.g., 2024-08-20)
-    - `clientId` - Filter by client ID (e.g., 26742494)
-    - `empId` - Filter by employee ID (e.g., PSR-11)
-- `GET /api/orders/:id` - Get a specific order
+### Start the App
 
-## Security
+```bash
+npm run start
+```
+## ⚙️ Option 2: Manual Setup (Local MySQL)
+### Prerequisites
+#### Node.js (v14+)
 
-- All routes except authentication are protected by JWT
-- Passwords are hashed using bcrypt
-- Request validation ensures proper data integrity
+#### MySQL (v5.7+)
 
-## License
+## Step-by-step Instructions
+#### Create Database
 
-This project is licensed under the MIT License.
+#### Login to MySQL and create the DB:
+```bash
+CREATE DATABASE my_database;
+```
+
+#### Import SQL File
+```bash
+mysql -u root -p my_database < my_database.sql
+```
+
+#### Configure .env
+
+##### Create a .env file with your local DB credentials:
+
+```bash
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=rootpassword
+DB_NAME=my_database
+DB_PORT=3306
+
+JWT_SECRET=your_jwt_secret
+```
+
+#### Install Dependencies
+
+```bash
+npm install
+```
+#### Start the Server
+
+```bash
+npm run start
+```
